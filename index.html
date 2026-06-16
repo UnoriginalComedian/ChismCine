@@ -502,11 +502,29 @@
     });
     readout.innerHTML='ƒ'+m.f+' &nbsp; '+m.mm+' <span class="d"></span> FOCUS — <b>'+m.name+'</b>';
   }
+  var isTouch=window.matchMedia('(hover:none) and (pointer:coarse)').matches;
+  var touchIdx=-1;
   items.forEach(function(it,j){
-    it.addEventListener('mouseenter',function(){ focusOn(j); });
-    it.addEventListener('click',function(e){ e.preventDefault(); shutterTo(it.getAttribute('data-go')); });
+    it.addEventListener('mouseenter',function(){ if(!isTouch) focusOn(j); });
+    it.addEventListener('click',function(e){
+      e.preventDefault();
+      if(isTouch){
+        if(touchIdx===j){
+          touchIdx=-1; shutterTo(it.getAttribute('data-go'));
+        } else {
+          touchIdx=j; focusOn(j);
+          var m=meta[j];
+          readout.innerHTML='ƒ'+m.f+'&nbsp;&nbsp;'+m.mm+'<span class="d"></span><b>'+m.name+'</b>&nbsp;&nbsp;tap again →';
+        }
+      } else {
+        shutterTo(it.getAttribute('data-go'));
+      }
+    });
   });
-  menu.addEventListener('mouseleave',function(){ if(!busy&&current==='home') restDOF(); });
+  menu.addEventListener('mouseleave',function(){ if(!busy&&current==='home'&&!isTouch) restDOF(); });
+  homeSection.addEventListener('touchstart',function(e){
+    if(isTouch&&touchIdx!==-1&&!menu.contains(e.target)){ touchIdx=-1; restDOF(); }
+  },{passive:true});
   homeSection.addEventListener('mousemove',function(e){ if(!homeSection.classList.contains('live'))return;
     var r=homeSection.getBoundingClientRect(),dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;
     homeVid.style.transform='translate('+(dx*14)+'px,'+(dy*10)+'px)';
