@@ -1,0 +1,9 @@
+{
+  "name": "chism-cinematics",
+  "version": "1.0.0",
+  "description": "Chism Cinematics website",
+  "private": true,
+  "dependencies": {
+    "framer-motion": "^12.40.0"
+  }
+}

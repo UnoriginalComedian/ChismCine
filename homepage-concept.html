@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chism Cinematics — Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#163A29;
+    --green-deep:#0E261A;
+    --green-near-black:#0A1C13;
+    --cream:#ECE4D2;
+    --cream-soft:#F3ECDD;
+    --sage:#6E8676;
+    --sage-light:#A9BBAE;
+    --gold:#C9A24B;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Inter',-apple-system,system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--cream);color:var(--green);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+  /* film grain overlay across whole page */
+  .grain{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0.05;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+
+  /* ---------- NAV ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+    padding:20px 40px;transition:background .4s ease,padding .4s ease;}
+  nav.scrolled{background:rgba(10,28,19,0.92);backdrop-filter:blur(8px);padding:14px 40px;}
+  .brand{display:flex;align-items:center;gap:12px;color:var(--cream);text-decoration:none;}
+  .brand .mark{width:34px;height:34px;}
+  .brand .name{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:.3px;}
+  .navlinks{display:flex;gap:32px;align-items:center;}
+  .navlinks a{color:var(--cream);text-decoration:none;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;opacity:.82;transition:opacity .2s;}
+  .navlinks a:hover{opacity:1;}
+  .navlinks .cta{border:1px solid rgba(236,228,210,.45);padding:9px 18px;border-radius:4px;}
+  .navlinks .cta:hover{background:var(--cream);color:var(--green);opacity:1;}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;min-height:100vh;background:var(--green-near-black);color:var(--cream);
+    display:flex;flex-direction:column;justify-content:center;padding:0 40px;overflow:hidden;}
+  .hero::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 30% 35%, rgba(34,74,52,.55), transparent 60%);pointer-events:none;}
+  .hero-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;width:100%;}
+  .eyebrow{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--sage-light);margin-bottom:22px;}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(48px,9vw,120px);line-height:.95;letter-spacing:-1px;}
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--gold);}
+  .hero .sub{margin-top:26px;font-size:clamp(15px,2vw,19px);max-width:520px;color:#D8CFBB;line-height:1.6;font-weight:400;}
+  /* category index */
+  .cat-index{position:relative;z-index:2;max-width:1100px;margin:60px auto 0;width:100%;
+    border-top:1px solid rgba(169,187,174,.25);display:grid;grid-template-columns:repeat(4,1fr);}
+  .cat{padding:24px 10px 6px;border-right:1px solid rgba(169,187,174,.18);cursor:pointer;transition:.3s;}
+  .cat:last-child{border-right:none;}
+  .cat:hover{background:rgba(34,74,52,.4);}
+  .cat .num{font-size:11px;color:var(--sage);letter-spacing:2px;}
+  .cat .label{font-family:var(--serif);font-size:clamp(17px,2.2vw,23px);font-weight:500;margin-top:6px;color:var(--cream);}
+  .scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+    font-size:11px;letter-spacing:3px;color:var(--sage-light);text-transform:uppercase;}
+
+  /* ---------- SELECTED WORK ---------- */
+  .section{padding:110px 40px;max-width:1200px;margin:0 auto;}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;flex-wrap:wrap;gap:16px;}
+  .section-head .kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--sage);margin-bottom:14px;}
+  .section-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(32px,5vw,56px);line-height:1;letter-spacing:-.5px;}
+  .section-head p{max-width:340px;font-size:14px;line-height:1.7;color:#4A5E51;}
+
+  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+  .work-card{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:16/10;background:var(--green-deep);cursor:pointer;}
+  .work-card.tall{aspect-ratio:4/5;}
+  .work-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .5s ease;filter:saturate(.85) contrast(1.03);}
+  .work-card:hover img{transform:scale(1.05);}
+  .work-card .placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#1d4733,#0e261a);}
+  .work-card .placeholder svg{width:54px;height:54px;opacity:.5;}
+  .work-card .meta{position:absolute;left:0;right:0;bottom:0;padding:22px;z-index:3;
+    background:linear-gradient(to top,rgba(10,28,19,.85),transparent);color:var(--cream);}
+  .work-card .meta .tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+  .work-card .meta .title{font-family:var(--serif);font-size:22px;font-weight:500;margin-top:4px;}
+  .work-card .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;
+    width:62px;height:62px;border:1.5px solid rgba(236,228,210,.8);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:.4s;}
+  .work-card:hover .play{opacity:1;}
+  .work-card .play svg{width:20px;height:20px;margin-left:3px;}
+
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--green);color:var(--cream);padding:120px 40px;position:relative;overflow:hidden;}
+  .about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:70px;align-items:center;}
+  .about-portrait{aspect-ratio:4/5;border-radius:10px;background:linear-gradient(160deg,#1d4733,#0a1c13);display:flex;align-items:center;justify-content:center;}
+  .about-portrait span{font-family:var(--serif);font-size:80px;color:rgba(236,228,210,.18);font-weight:600;}
+  .about h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.5vw,48px);line-height:1.05;letter-spacing:-.5px;margin-bottom:26px;}
+  .about h2 em{font-style:italic;color:var(--gold);font-weight:400;}
+  .about p{font-size:16px;line-height:1.85;color:#D8CFBB;margin-bottom:18px;max-width:520px;}
+  .about .sig{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--cream);margin-top:10px;}
+
+  /* ---------- ESTIMATOR TEASER ---------- */
+  .estimator{padding:110px 40px;text-align:center;max-width:760px;margin:0 auto;}
+  .estimator .kicker{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--sage);margin-bottom:18px;}
+  .estimator h2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,50px);line-height:1.05;letter-spacing:-.5px;margin-bottom:20px;}
+  .estimator p{font-size:16px;line-height:1.7;color:#4A5E51;margin-bottom:34px;max-width:520px;margin-left:auto;margin-right:auto;}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:var(--cream);
+    font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 30px;border-radius:5px;text-decoration:none;transition:.3s;border:1px solid var(--green);}
+  .btn:hover{background:transparent;color:var(--green);}
+  .btn.ghost{background:transparent;color:var(--cream);border-color:rgba(236,228,210,.5);}
+  .btn.ghost:hover{background:var(--cream);color:var(--green);}
+
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{background:var(--green-near-black);color:var(--cream);padding:90px 40px 40px;}
+  .foot-inner{max-width:1100px;margin:0 auto;}
+  .foot-cta{text-align:center;border-bottom:1px solid rgba(169,187,174,.2);padding-bottom:70px;margin-bottom:40px;}
+  .foot-cta h2{font-family:var(--serif);font-weight:600;font-size:clamp(34px,6vw,72px);line-height:1;letter-spacing:-1px;margin-bottom:30px;}
+  .foot-cta h2 em{font-style:italic;color:var(--gold);font-weight:400;}
+  .foot-meta{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:13px;color:var(--sage-light);}
+  .foot-meta a{color:var(--cream);text-decoration:none;letter-spacing:1px;margin-left:22px;font-size:12px;text-transform:uppercase;opacity:.8;}
+  .foot-meta a:hover{opacity:1;}
+
+  @media(max-width:760px){
+    nav{padding:16px 20px;}
+    .navlinks{display:none;}
+    .section,.estimator{padding:70px 22px;}
+    .about{padding:80px 22px;}
+    .about-inner{grid-template-columns:1fr;gap:36px;}
+    .cat-index{grid-template-columns:repeat(2,1fr);}
+    .cat:nth-child(2n){border-right:none;}
+    .work-grid{grid-template-columns:1fr;}
+    .work-card.tall{aspect-ratio:16/10;}
+    footer{padding:60px 22px 30px;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<nav id="nav">
+  <a class="brand" href="#top">
+    <svg class="mark" viewBox="0 0 100 100" fill="none" aria-label="Chism Cinematics mark">
+      <path d="M 72.5 23.2 A 35 35 0 1 0 72.5 76.8" stroke="#ECE4D2" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="9" fill="#ECE4D2"/>
+    </svg>
+    <span class="name">Chism Cinematics</span>
+  </a>
+  <div class="navlinks">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#estimator">Pricing</a>
+    <a class="cta" href="#contact">Get in touch</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="eyebrow">Boyds, Maryland · Est. 2020</div>
+    <h1>Films that<br>feel like <em>memory.</em></h1>
+    <p class="sub">Weddings, commercials, and music videos — shot with a cinematic eye and an honest heart. One filmmaker, your whole story.</p>
+  </div>
+  <div class="cat-index">
+    <div class="cat"><div class="num">01</div><div class="label">Weddings</div></div>
+    <div class="cat"><div class="num">02</div><div class="label">Commercial</div></div>
+    <div class="cat"><div class="num">03</div><div class="label">Music Videos</div></div>
+    <div class="cat"><div class="num">04</div><div class="label">Short Films</div></div>
+  </div>
+  <div class="scroll-hint">Scroll ↓</div>
+</header>
+
+<!-- SELECTED WORK -->
+<section class="section" id="work">
+  <div class="section-head">
+    <div>
+      <div class="kicker">Selected Work</div>
+      <h2>A reel of moments.</h2>
+    </div>
+    <p>A look across the range — from the aisle to the brand to the stage. Every frame, intentional.</p>
+  </div>
+  <div class="work-grid">
+    <a class="work-card" href="https://www.youtube.com/watch?v=l5gFqCWC0nQ">
+      <img src="https://i.ytimg.com/vi/l5gFqCWC0nQ/maxresdefault.jpg" alt="Zach and Patience wedding film">
+      <div class="play"><svg viewBox="0 0 24 24" fill="#ECE4D2"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="meta"><div class="tag">Wedding</div><div class="title">Zach &amp; Patience</div></div>
+    </a>
+    <a class="work-card" href="https://www.youtube.com/watch?v=W2KYwGHtQ5I">
+      <img src="https://i.ytimg.com/vi/W2KYwGHtQ5I/maxresdefault.jpg" alt="Danny and Jess wedding film">
+      <div class="play"><svg viewBox="0 0 24 24" fill="#ECE4D2"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="meta"><div class="tag">Wedding</div><div class="title">Danny &amp; Jess</div></div>
+    </a>
+    <a class="work-card" href="#">
+      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#ECE4D2" stroke-width="1.4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M7 4v5M17 4v5M7 20v-5M17 20v-5"/></svg></div>
+      <div class="play"><svg viewBox="0 0 24 24" fill="#ECE4D2"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="meta"><div class="tag">Commercial</div><div class="title">CB Painting</div></div>
+    </a>
+    <a class="work-card" href="#">
+      <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#ECE4D2" stroke-width="1.4"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      <div class="play"><svg viewBox="0 0 24 24" fill="#ECE4D2"><path d="M8 5v14l11-7z"/></svg></div>
+      <div class="meta"><div class="tag">Music Video</div><div class="title">Add your latest</div></div>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-portrait"><span>JC</span></div>
+    <div>
+      <h2>Hey, I'm <em>Joel.</em></h2>
+      <p>As a Christian, I believe in the weight of a promise — and in being present enough to catch the moments that make a day truly yours. My approach is to let things unfold naturally, blending the upbeat with the tender so your film actually feels like it felt.</p>
+      <p>When I'm not behind a camera, you'll probably find me with a cup of coffee, some good music, and the people I love.</p>
+      <div class="sig">— Joel Chism</div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTIMATOR TEASER -->
+<section class="estimator" id="estimator">
+  <div class="kicker">Investment</div>
+  <h2>Build your package.</h2>
+  <p>Every story is different, so every quote is too. Use the interactive estimator to shape coverage, crew, and delivery — and get a transparent number in minutes.</p>
+  <a class="btn" href="#">Start the estimator</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="foot-inner">
+    <div class="foot-cta">
+      <h2>Let's make<br>something <em>worth keeping.</em></h2>
+      <a class="btn ghost" href="mailto:joelpchism@gmail.com">Start a conversation</a>
+    </div>
+    <div class="foot-meta">
+      <div>© 2026 Chism Cinematics · Boyds, MD</div>
+      <div>
+        <a href="#">Instagram</a>
+        <a href="#">YouTube</a>
+        <a href="mailto:joelpchism@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav=document.getElementById('nav');
+  window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>40);});
+</script>
+</body>
+</html>

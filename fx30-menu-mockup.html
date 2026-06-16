@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FX30 · Chism Cinematics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --disp:'Outfit',-apple-system,system-ui,sans-serif;
+    --mono:'IBM Plex Mono',monospace;
+  }
+  body{
+    background:#1a1a1a;
+    display:flex;align-items:center;justify-content:center;
+    min-height:100vh;
+  }
+
+  /* ── camera ── */
+  .wrap{position:relative;display:inline-block;line-height:0;}
+  .cam{display:block;width:800px;height:auto;}
+
+  /* ── LCD cutout — pixel-perfect to the screen hole in the cropped PNG ── */
+  .screen{
+    position:absolute;
+    left:122px; top:105px;   /* 800×532 rendered at 800px wide; 19.737% × 532 = 105px */
+    width:364px; height:255px;
+    overflow:hidden;
+    border-radius:2px;
+    background:#060606;
+  }
+
+  /* inner container at 860×602, scaled to fill the 364×255 screen */
+  .inner{
+    transform-origin:top left;
+    transform:scale(0.4233);   /* 364 / 860 */
+    width:860px;
+    height:602px;              /* 255 / 0.4233 */
+    display:flex;
+    flex-direction:column;
+    background:#060606;
+    color:#fff;
+    font-family:var(--disp);
+  }
+
+  /* ── menu chrome ── */
+  .mos{
+    flex:1;display:flex;flex-direction:column;
+    padding:20px 24px;
+  }
+  .mos-top{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 4px 16px;
+  }
+  .mos-title{font-weight:600;font-size:32px;letter-spacing:-.3px;color:#fff;}
+  .mos-page{font-family:var(--mono);font-size:18px;letter-spacing:1px;color:#e6e6e6;}
+
+  .mos-body{
+    display:flex;flex:1;min-height:0;
+    border-top:1px solid rgba(255,255,255,.14);
+  }
+
+  /* rail */
+  .mos-rail{display:flex;flex-direction:column;flex:0 0 auto;padding-top:6px;}
+  .mtab{
+    width:60px;height:58px;
+    display:flex;align-items:center;justify-content:center;
+    border:none;cursor:pointer;padding:0;flex-shrink:0;
+  }
+  .mtab svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+  .mtab.lighttab svg{stroke:#1a1a1a;}
+  .mtab:not(.on){filter:brightness(.5) saturate(.8);}
+
+  /* list */
+  .mos-mid{flex:1 1 0;min-width:0;padding-top:6px;}
+  .mitem{
+    display:flex;align-items:center;gap:14px;
+    height:58px;padding:0 20px;cursor:pointer;
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .mitem .mi-n{
+    flex:0 0 auto;min-width:26px;text-align:center;
+    background:var(--cat,#BE3B30);color:var(--catink,#fff);
+    font-family:var(--mono);font-size:17px;line-height:1.6;padding:0 6px;
+  }
+  .mitem .mi-name{font-weight:500;font-size:22px;color:#eee;}
+  .mitem:hover{background:rgba(255,255,255,.05);}
+  .mitem.sel{background:var(--cat,#BE3B30);}
+  .mitem.sel .mi-name{color:var(--catink,#fff);}
+  .mitem.sel .mi-n{background:var(--catink,#fff);color:var(--cat,#BE3B30);}
+
+  /* detail */
+  .mos-detail{
+    flex:1 1 0;min-width:0;align-self:stretch;
+    background:#474747;padding:36px 32px;
+  }
+  .mos-detail .dt-k{
+    font-family:var(--mono);font-size:14px;letter-spacing:2px;
+    text-transform:uppercase;color:#c2c2c2;margin-bottom:16px;
+  }
+  .mos-detail .dt-name{
+    font-weight:600;font-size:38px;letter-spacing:-.5px;
+    color:#fff;margin-bottom:18px;line-height:1.1;
+  }
+  .mos-detail .dt-v{
+    font-family:var(--mono);font-size:24px;color:#fff;line-height:1.6;
+  }
+
+  /* footer */
+  .mos-foot{
+    display:flex;gap:28px;flex-wrap:wrap;
+    padding:16px 4px;border-top:1px solid rgba(255,255,255,.14);
+    font-family:var(--mono);font-size:14px;letter-spacing:1.5px;
+    text-transform:uppercase;color:#9a9a9a;
+  }
+  .mos-foot b{color:#fff;font-weight:500;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="cam" src="photos/fx30/fx30-cropped.png" alt="Sony FX30 rear">
+  <div class="screen">
+    <div class="inner">
+      <div class="mos" id="mosEl">
+        <div class="mos-top">
+          <span class="mos-title" id="mosTitle">Overview</span>
+          <span class="mos-page" id="mosPage">1 / 5</span>
+        </div>
+        <div class="mos-body">
+          <div class="mos-rail" id="mosRail"></div>
+          <div class="mos-mid"  id="mosMid"></div>
+          <div class="mos-detail" id="mosDetail"></div>
+        </div>
+        <div class="mos-foot">
+          <span><b>▲▼◀▶</b> navigate</span>
+          <span><b>●</b> no menus, just the deal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var rail=document.getElementById('mosRail'),
+      mid=document.getElementById('mosMid'),
+      det=document.getElementById('mosDetail'),
+      titleEl=document.getElementById('mosTitle'),
+      pageEl=document.getElementById('mosPage'),
+      mosEl=document.getElementById('mosEl');
+
+  var IC={
+    star:'<svg viewBox="0 0 24 24"><path d="M12 3.2l2.6 5.6 6 .7-4.4 4.2 1.2 6-5.4-2.9-5.4 2.9 1.2-6L3 9.5l6-.7z"/></svg>',
+    cam:'<svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="19" height="13" rx="2.2"/><circle cx="12" cy="13" r="3.7"/><path d="M8 6.5l1.3-2h5.4l1.3 2"/></svg>',
+    lens:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6"/></svg>',
+    mic:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4"/></svg>',
+    light:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="M9.5 18h5M10.5 21h3M12 2v1.6"/></svg>',
+    move:'<svg viewBox="0 0 24 24"><path d="M5 5l5 5M19 5l-5 5M5 19l5-5M19 19l-5-5"/><circle cx="12" cy="12" r="3"/></svg>'
+  };
+
+  var wp=[
+    {label:'Overview',color:'#C9C3B3',light:1,icon:IC.star,rows:[
+      ['Workflow','Solo — start to finish'],['Approach','Documentary-true'],
+      ['Turnaround','~3 months'],['Booking','50% deposit holds date'],
+      ['You always know','Exactly what it\'s shot on']]},
+    {label:'Camera',color:'#BE3B30',icon:IC.cam,rows:[
+      ['Body','Sony FX30 · Super 35'],['Backup','2nd body, every shoot'],
+      ['Capture','4K · 10-bit'],['Frame rates','24 / 60 / 120 fps']]},
+    {label:'Lenses',color:'#C03A8E',icon:IC.lens,rows:[
+      ['Zoom','24–70mm f/2.8'],['Prime','50mm'],
+      ['Prime','85mm'],['Look','Shallow, cinematic DOF']]},
+    {label:'Audio',color:'#6B4FA1',icon:IC.mic,rows:[
+      ['Wireless','Dual lav system'],['Boom','Shotgun mic'],
+      ['Recorder','Field recorder · backup'],['Vows & speeches','Captured clean']]},
+    {label:'Lighting',color:'#2E73B8',icon:IC.light,rows:[
+      ['Key','LED panel'],['Ambience','Practicals & mods'],['Style','Natural-first']]},
+    {label:'Movement',color:'#46A33E',icon:IC.move,rows:[
+      ['Gimbal','Handheld stabilizer'],['Support','Tripod · slider'],
+      ['Aerial','Drone — licensed-ready']]}
+  ];
+
+  var selTab=0, selRow=0;
+
+  rail.innerHTML=wp.map(function(p,i){
+    return '<button class="mtab'+(i===0?' on':'')+(p.light?' lighttab':'')+
+           '" data-i="'+i+'" style="background:'+p.color+'">'+p.icon+'</button>';
+  }).join('');
+
+  function render(){
+    var p=wp[selTab];
+    mosEl.style.setProperty('--cat',p.color);
+    mosEl.style.setProperty('--catink',p.light?'#1a1a1a':'#fff');
+    titleEl.textContent=p.label;
+    mid.innerHTML=p.rows.map(function(r,j){
+      return '<div class="mitem'+(j===selRow?' sel':'')+'" data-j="'+j+
+             '"><span class="mi-n">'+(j+1)+'</span><span class="mi-name">'+r[0]+'</span></div>';
+    }).join('');
+    var sel=p.rows[selRow];
+    det.innerHTML='<div class="dt-k">Spec</div><div class="dt-name">'+sel[0]+
+                  '</div><div class="dt-v">'+sel[1]+'</div>';
+    pageEl.textContent=(selRow+1)+' / '+p.rows.length;
+    [].forEach.call(rail.children,function(t,k){ t.classList.toggle('on',k===selTab); });
+  }
+
+  function setTab(i){ selTab=(i+wp.length)%wp.length; selRow=0; render(); }
+  function setRow(j){ selRow=Math.max(0,Math.min(wp[selTab].rows.length-1,j)); render(); }
+
+  rail.addEventListener('click',function(e){
+    var t=e.target.closest('.mtab'); if(t) setTab(+t.getAttribute('data-i'));
+  });
+  mid.addEventListener('click',function(e){
+    var r=e.target.closest('.mitem'); if(r) setRow(+r.getAttribute('data-j'));
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowDown'){e.preventDefault();setRow(selRow+1);}
+    else if(e.key==='ArrowUp'){e.preventDefault();setRow(selRow-1);}
+    else if(e.key==='ArrowRight'){e.preventDefault();setTab(selTab+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();setTab(selTab-1);}
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
