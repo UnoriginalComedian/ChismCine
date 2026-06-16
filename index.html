@@ -154,7 +154,7 @@
   .mtab.lighttab svg{stroke:#1a1a1a;}
   .mtab:not(.on){filter:brightness(.5) saturate(.85);}
   .mos-mid{flex:1 1 0;min-width:0;padding-top:6px;display:flex;flex-direction:column;}
-  .mitem{display:flex;align-items:center;gap:13px;flex:1;min-height:40px;padding:0 clamp(12px,2vw,22px);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.07);}
+  .mitem{display:flex;align-items:center;gap:13px;padding:0 clamp(12px,2vw,22px);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.07);}
   .mitem .mi-n{flex:0 0 auto;min-width:24px;text-align:center;background:var(--cat,#BE3B30);color:var(--catink,#fff);font-family:var(--mono);font-size:15px;line-height:1.55;padding:1px 6px;}
   .mitem .mi-name{font-family:var(--disp);font-weight:500;font-size:clamp(17px,2.4vw,22px);color:#eee;}
   .mitem:hover{background:rgba(255,255,255,.05);}
@@ -606,6 +606,8 @@
       [].forEach.call(rail.children,function(t,k){t.classList.toggle('on',k===selTab);});
       var topEl=document.querySelector('.mos-top');
       if(topEl) rail.style.paddingBottom=topEl.offsetHeight+'px';
+      var tab=rail.querySelector('.mtab');
+      if(tab&&tab.offsetHeight){var h=tab.offsetHeight+'px';[].forEach.call(midEl.querySelectorAll('.mitem'),function(el){el.style.height=h;});}
     }
     function setTab(i){ selTab=(i+wp.length)%wp.length; selRow=0; render(); }
     function setRow(j){ selRow=Math.max(0,Math.min(wp[selTab].rows.length-1,j)); render(); }
@@ -641,6 +643,12 @@
       var lcd=document.querySelector('.fx30-lcd'),mo=document.querySelector('.menu-os');
       if(!lcd||!mo)return;var s=lcd.offsetWidth/760;if(!s)return;
       mo.style.transform='scale('+s+')';mo.style.height=(lcd.offsetHeight/s)+'px';
+      // re-sync item heights to tab heights after scale settles
+      setTimeout(function(){
+        var tab=document.querySelector('.mtab');
+        var mid=document.getElementById('mosMid');
+        if(tab&&tab.offsetHeight&&mid){var h=tab.offsetHeight+'px';[].forEach.call(mid.querySelectorAll('.mitem'),function(el){el.style.height=h;});}
+      },0);
     }
     window.addEventListener('resize',updateCollab);
     new MutationObserver(updateCollab).observe(document.querySelector('[data-id="collab"]'),{attributes:true,attributeFilter:['class']});
