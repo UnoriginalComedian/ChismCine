@@ -500,7 +500,6 @@
       if(j===i){ it.classList.add('act'); it.style.filter='blur(0px)'; it.style.opacity='1'; it.style.transform='scale(1.05) translateX(6px)'; fringe(it,false); }
       else{ it.classList.remove('act'); it.style.filter='blur(7px)'; it.style.opacity='.42'; it.style.transform='scale(.99)'; fringe(it,true); }
     });
-    readout.innerHTML='ƒ'+m.f+' &nbsp; '+m.mm+' <span class="d"></span> FOCUS — <b>'+m.name+'</b>';
   }
   var isTouch=window.matchMedia('(hover:none) and (pointer:coarse)').matches;
   var touchIdx=-1;
@@ -513,8 +512,6 @@
           touchIdx=-1; shutterTo(it.getAttribute('data-go'));
         } else {
           touchIdx=j; focusOn(j);
-          var m=meta[j];
-          readout.innerHTML='ƒ'+m.f+'&nbsp;&nbsp;'+m.mm+'<span class="d"></span><b>'+m.name+'</b>&nbsp;&nbsp;tap again →';
         }
       } else {
         shutterTo(it.getAttribute('data-go'));
