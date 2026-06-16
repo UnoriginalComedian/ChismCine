@@ -604,6 +604,8 @@
       detailEl.innerHTML=sel[1].map(function(o){return '<div class="dopt"><span class="do-i">▸</span><span class="do-t">'+o+'</span></div>';}).join('');
       pageEl.textContent=(selRow+1)+' / '+p.rows.length;
       [].forEach.call(rail.children,function(t,k){t.classList.toggle('on',k===selTab);});
+      var topEl=document.querySelector('.mos-top');
+      if(topEl) rail.style.paddingBottom=topEl.offsetHeight+'px';
     }
     function setTab(i){ selTab=(i+wp.length)%wp.length; selRow=0; render(); }
     function setRow(j){ selRow=Math.max(0,Math.min(wp[selTab].rows.length-1,j)); render(); }
