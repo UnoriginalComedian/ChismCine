@@ -328,8 +328,18 @@
     .fpi{font-size:clamp(28px,7.2vw,36px);letter-spacing:-1.5px;}
     .home-inner{padding-bottom:80px;}
 
-    /* WWM — full-width steps */
+    /* WWM — scroll from top, full-width steps */
     .wstep{flex:1 1 100%;}
+    [data-id="wwm"] .sec-inner{
+      justify-content:flex-start;
+      padding-top:clamp(80px,12vh,100px);
+      padding-bottom:clamp(32px,5vh,56px);
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    [data-id="wwm"] .stt{font-size:clamp(28px,7.2vw,42px);}
+    [data-id="wwm"] .sds{margin-top:12px;}
+    [data-id="wwm"] .wwm-steps{margin-top:18px;gap:14px;}
 
     /* Section bottom padding — room for FAB */
     .sec-inner{padding-bottom:clamp(90px,14vh,120px);}
