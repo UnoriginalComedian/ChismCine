@@ -130,6 +130,36 @@
   .about-scroller .sds{max-width:none;}
   .about-scroller .sds+.sds{margin-top:14px;}
 
+  /* CLAPPERBOARD */
+  .clapper-wrap{position:absolute;left:0;top:50%;z-index:6;
+    transform:translateX(-130%) translateY(-50%);
+    pointer-events:none;will-change:transform;}
+  .clapper-wrap.clap-in{transform:translateX(clamp(20px,4vw,44px)) translateY(-50%);}
+  .clapper-board{width:clamp(170px,20vw,210px);background:#0d0d0d;border-radius:4px;
+    box-shadow:0 20px 70px rgba(0,0,0,.9),0 4px 16px rgba(0,0,0,.6);
+    position:relative;overflow:visible;}
+  .clapper-arm{position:absolute;bottom:100%;left:0;right:0;
+    height:clamp(28px,3.5vw,38px);transform-origin:0% 100%;transform:rotate(-30deg);
+    background:repeating-linear-gradient(-45deg,#0d0d0d 0,#0d0d0d 10px,#F7F7F4 10px,#F7F7F4 20px);
+    border-radius:3px 3px 0 0;border:1.5px solid #2a2a2a;
+    transition:transform .12s cubic-bezier(.85,0,1,.7);}
+  .clapper-arm.clamped{transform:rotate(0deg);}
+  .clapper-hinge{position:absolute;left:-1px;bottom:-1px;width:12px;height:12px;
+    background:#333;border-radius:50%;border:1px solid #555;z-index:2;}
+  .clapper-body{border-top:2px solid #2a2a2a;
+    padding:clamp(8px,1.2vw,12px) clamp(9px,1.4vw,14px);}
+  .clapper-title{font-family:var(--disp);font-weight:700;
+    font-size:clamp(14px,1.8vw,19px);letter-spacing:-.4px;line-height:1;
+    margin-bottom:clamp(6px,.9vw,9px);border-bottom:1px solid #222;
+    padding-bottom:clamp(5px,.8vw,8px);}
+  .ct-ch{color:#F7F7F4;}
+  .ct-ci{color:#9FE0CE;}
+  .clapper-fields{display:grid;grid-template-columns:max-content 1fr;gap:2px 8px;}
+  .cf-k{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;
+    text-transform:uppercase;color:#666;line-height:1.9;}
+  .cf-v{font-family:var(--mono);font-size:8px;color:#aaa;
+    border-bottom:1px solid #1e1e1e;line-height:1.9;}
+
   .films{margin-top:26px;display:flex;flex-direction:column;gap:2px;}
   .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:padding .25s;width:min(560px,90vw);}
   .film:hover{padding-left:12px;}
@@ -373,6 +403,19 @@
 <section class="screen" data-id="about">
   <div class="sec-bg blur" role="img" aria-label="Joel Chism on location — San Diego wedding and commercial filmmaker" style="background-image:url('https://chismcine.com/assets/images/image01.jpg')"></div>
   <div class="sec-scrim"></div>
+  <div class="clapper-wrap" id="clapperWrap" aria-hidden="true">
+    <div class="clapper-board">
+      <div class="clapper-arm" id="clapperArm"><div class="clapper-hinge"></div></div>
+      <div class="clapper-body">
+        <div class="clapper-title"><span class="ct-ch">chism</span><span class="ct-ci"> cinematics</span></div>
+        <div class="clapper-fields">
+          <span class="cf-k">PROD</span><span class="cf-v">Joel Chism</span>
+          <span class="cf-k">CAM</span><span class="cf-v">Sony FX30</span>
+          <span class="cf-k">SCENE</span><span class="cf-v">About</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="about-split">
     <div class="about-text">
       <div class="kick">The Filmmaker · San Diego, CA</div>
@@ -746,21 +789,50 @@
   var btnF  = document.getElementById('btnFull');
   var short = document.getElementById('aboutShort');
   var full  = document.getElementById('aboutFull');
-  if (!btnS || !btnF) return;
+  var wrap  = document.getElementById('clapperWrap');
+  var arm   = document.getElementById('clapperArm');
+  if (!btnS || !btnF || !wrap || !arm) return;
 
-  function toggle(isShort) {
+  var busy = false, cur = true; // cur: true = short visible
+
+  function swap(isShort) {
     short.style.display = isShort ? '' : 'none';
     full.style.display  = isShort ? 'none' : '';
     btnS.classList.toggle('active', isShort);
     btnF.classList.toggle('active', !isShort);
     btnS.setAttribute('aria-pressed', isShort ? 'true' : 'false');
     btnF.setAttribute('aria-pressed', !isShort ? 'true' : 'false');
-    var scroller = document.querySelector('.about-scroller');
-    if (scroller) scroller.scrollTop = 0;
+    var sc = document.querySelector('.about-scroller');
+    if (sc) sc.scrollTop = 0;
+    cur = isShort;
   }
 
-  btnS.addEventListener('click', function(){ toggle(true); });
-  btnF.addEventListener('click', function(){ toggle(false); });
+  function clap(isShort) {
+    if (busy || isShort === cur) return;
+    busy = true;
+    // 1. Slide in (500ms)
+    wrap.style.transition = 'transform .5s cubic-bezier(.18,0,.25,1)';
+    wrap.classList.add('clap-in');
+    setTimeout(function(){
+      // 2. Clap arm down
+      arm.classList.add('clamped');
+      // 3. Swap content at impact (120ms into the clap)
+      setTimeout(function(){ swap(isShort); }, 120);
+      // 4. Unclap after 460ms
+      setTimeout(function(){
+        arm.classList.remove('clamped');
+        // 5. Pause 350ms then slide out
+        setTimeout(function(){
+          wrap.style.transition = 'transform .5s cubic-bezier(.75,0,.85,1)';
+          wrap.classList.remove('clap-in');
+          setTimeout(function(){ wrap.style.transition = ''; busy = false; }, 520);
+        }, 350);
+      }, 460);
+    }, 650); // wait for slide-in + small pause before clap
+  }
+
+  btnS.addEventListener('click', function(){ clap(true); });
+  btnF.addEventListener('click', function(){ clap(false); });
 })();
 </script>
 <!-- CONTACT — floating C-lens button -->
