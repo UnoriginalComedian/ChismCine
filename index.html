@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Chism Cinematics — Wedding & Commercial Filmmaker in San Diego, CA</title>
 <meta name="description" content="Joel Chism is a wedding, commercial, and music video filmmaker based in San Diego, CA. Documentary-style films shot on a Sony FX30. One-person studio with direct access to the filmmaker.">
 <meta name="geo.region" content="US-CA">
@@ -315,6 +315,35 @@
     .navlinks{display:none;}
     .stamp{display:none;}
     .mob-menu-btn{display:flex;}
+
+    /* Touch targets */
+    .atbtn{min-height:44px;padding:10px 18px;}
+    .back{min-height:44px;}
+    button,a,[data-go]{touch-action:manipulation;}
+
+    /* Readable body text */
+    .sds{font-size:16px;line-height:1.7;}
+
+    /* Home — smaller type so all 4 items are above the fold */
+    .fpi{font-size:clamp(28px,7.2vw,36px);letter-spacing:-1.5px;}
+    .home-inner{padding-bottom:80px;}
+
+    /* WWM — full-width steps */
+    .wstep{flex:1 1 100%;}
+
+    /* Section bottom padding — room for FAB */
+    .sec-inner{padding-bottom:clamp(90px,14vh,120px);}
+
+    /* About — clapperboard must be positioned within about-text */
+    .about-text{position:relative;}
+
+    /* Collab — hide camera composite on phone, show just head */
+    .fx30-cam{display:none;}
+    .wwm-wrap{justify-content:center;}
+
+    /* Safe area for notch/home-indicator */
+    .contact{bottom:max(22px,env(safe-area-inset-bottom));}
+    .mob-nav{padding-bottom:env(safe-area-inset-bottom);}
   }
 
   /* CONTACT — floating C-lens button */
