@@ -111,16 +111,19 @@
   }
 
   /* ABOUT TOGGLE */
-  .about-toggle{display:flex;align-items:center;gap:18px;margin:22px 0 0;}
-  .atbtn{background:none;border:none;font-family:var(--mono);font-size:11px;letter-spacing:2px;
-    text-transform:uppercase;color:rgba(247,247,244,.32);cursor:pointer;padding:4px 0;
-    display:flex;align-items:center;gap:6px;transition:color .35s ease;-webkit-font-smoothing:antialiased;}
+  .about-toggle{display:flex;align-items:center;gap:10px;margin:24px 0 0;}
+  .atbtn{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    cursor:pointer;padding:9px 20px;border-radius:100px;
+    background:rgba(8,18,12,.45);border:1px solid rgba(247,247,244,.22);
+    color:rgba(247,247,244,.45);backdrop-filter:blur(6px);
+    display:flex;align-items:center;gap:7px;
+    transition:color .3s,border-color .3s,background .3s;-webkit-font-smoothing:antialiased;}
   .atbtn::before{content:'●';color:var(--orange);font-size:8px;
     opacity:0;transform:scale(0.4);
     transition:opacity .4s cubic-bezier(.5,0,.2,1),transform .4s cubic-bezier(.5,0,.2,1);}
-  .atbtn.active{color:#F7F7F4;}
+  .atbtn.active{color:#F7F7F4;border-color:rgba(28,140,125,.65);background:rgba(28,140,125,.14);}
   .atbtn.active::before{opacity:1;transform:scale(1);}
-  .atbtn:hover:not(.active){color:rgba(247,247,244,.65);}
+  .atbtn:hover:not(.active){border-color:rgba(247,247,244,.42);color:rgba(247,247,244,.75);}
   .atbtn:focus-visible{outline:2px solid var(--teal);outline-offset:4px;}
   @media(prefers-reduced-motion:reduce){.atbtn,.atbtn::before{transition:none;}}
   .about-scroller{overflow-y:auto;max-height:clamp(160px,42vh,380px);margin-top:18px;padding-right:6px;}
@@ -134,50 +137,62 @@
   .clapper-wrap{position:absolute;left:0;top:50%;z-index:6;
     transform:translateX(-130%) translateY(-50%);
     pointer-events:none;will-change:transform;}
-  .clapper-wrap.clap-in{transform:translateX(clamp(20px,4vw,44px)) translateY(-50%);}
-  .clapper-board{width:clamp(170px,20vw,210px);background:#0d0d0d;border-radius:4px;
-    box-shadow:0 20px 70px rgba(0,0,0,.9),0 4px 16px rgba(0,0,0,.6);
+  .clapper-wrap.clap-in{transform:translateX(clamp(0px,3vw,30px)) translateY(-50%);}
+  .clapper-board{width:clamp(280px,38vw,460px);background:#0d0d0d;border-radius:5px;
+    box-shadow:0 28px 90px rgba(0,0,0,.95),0 6px 24px rgba(0,0,0,.7);
     position:relative;overflow:visible;}
   .clapper-arm{position:absolute;bottom:100%;left:0;right:0;
-    height:clamp(28px,3.5vw,38px);transform-origin:0% 100%;transform:rotate(-30deg);
+    height:clamp(42px,5.5vw,64px);transform-origin:0% 100%;transform:rotate(-30deg);
     background:repeating-linear-gradient(-45deg,#0d0d0d 0,#0d0d0d 10px,#F7F7F4 10px,#F7F7F4 20px);
     border-radius:3px 3px 0 0;border:1.5px solid #2a2a2a;
     transition:transform .12s cubic-bezier(.85,0,1,.7);}
   .clapper-arm.clamped{transform:rotate(0deg);}
-  .clapper-hinge{position:absolute;left:-1px;bottom:-1px;width:12px;height:12px;
+  .clapper-hinge{position:absolute;left:-1px;bottom:-1px;width:16px;height:16px;
     background:#333;border-radius:50%;border:1px solid #555;z-index:2;}
   .clapper-body{border-top:2px solid #2a2a2a;
-    padding:clamp(8px,1.2vw,12px) clamp(9px,1.4vw,14px);}
+    padding:clamp(12px,1.8vw,20px) clamp(14px,2vw,24px);}
   .clapper-title{font-family:var(--disp);font-weight:700;
-    font-size:clamp(14px,1.8vw,19px);letter-spacing:-.4px;line-height:1;
-    margin-bottom:clamp(6px,.9vw,9px);border-bottom:1px solid #222;
-    padding-bottom:clamp(5px,.8vw,8px);}
+    font-size:clamp(22px,3vw,34px);letter-spacing:-.5px;line-height:1;
+    margin-bottom:clamp(10px,1.4vw,16px);border-bottom:1px solid #222;
+    padding-bottom:clamp(8px,1.2vw,14px);}
   .ct-ch{color:#F7F7F4;}
   .ct-ci{color:#9FE0CE;}
-  .clapper-fields{display:grid;grid-template-columns:max-content 1fr;gap:2px 8px;}
-  .cf-k{font-family:var(--mono);font-size:8px;letter-spacing:1.5px;
+  .clapper-fields{display:grid;grid-template-columns:max-content 1fr;gap:3px 12px;}
+  .cf-k{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;
     text-transform:uppercase;color:#666;line-height:1.9;}
-  .cf-v{font-family:var(--mono);font-size:8px;color:#aaa;
+  .cf-v{font-family:var(--mono);font-size:11px;color:#aaa;
     border-bottom:1px solid #1e1e1e;line-height:1.9;}
 
   /* CLAP BURST — expanding color waves + impact flash */
   .cb-wave{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;
-    clip-path:circle(0% at 15% 50%);}
-  #cbWave1{background:rgba(232,119,46,.52);}
-  #cbWave2{background:rgba(28,140,125,.42);}
-  #cbWave3{background:rgba(22,58,41,.38);}
-  @keyframes clapWave1{0%{clip-path:circle(0% at 15% 50%);opacity:.52;}80%{opacity:.1;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
-  @keyframes clapWave2{0%{clip-path:circle(0% at 15% 50%);opacity:.42;}80%{opacity:.08;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
-  @keyframes clapWave3{0%{clip-path:circle(0% at 15% 50%);opacity:.38;}80%{opacity:.06;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
+    clip-path:circle(0% at 22% 50%);}
+  #cbWave1{background:rgba(232,119,46,.9);}
+  #cbWave2{background:rgba(28,140,125,.82);}
+  #cbWave3{background:rgba(22,58,41,.75);}
+  @keyframes clapWave1{0%{clip-path:circle(0% at 22% 50%);opacity:.9;}80%{opacity:.18;}100%{clip-path:circle(150% at 22% 50%);opacity:0;}}
+  @keyframes clapWave2{0%{clip-path:circle(0% at 22% 50%);opacity:.82;}80%{opacity:.14;}100%{clip-path:circle(150% at 22% 50%);opacity:0;}}
+  @keyframes clapWave3{0%{clip-path:circle(0% at 22% 50%);opacity:.75;}80%{opacity:.1;}100%{clip-path:circle(150% at 22% 50%);opacity:0;}}
   #cbWave1.go{animation:clapWave1 .55s ease-out forwards;}
   #cbWave2.go{animation:clapWave2 .72s ease-out .08s forwards;}
   #cbWave3.go{animation:clapWave3 .9s ease-out .18s forwards;}
-  #clapFlash{position:fixed;left:15%;top:50%;z-index:8;pointer-events:none;
+  #clapFlash{position:fixed;left:22%;top:50%;z-index:8;pointer-events:none;
     width:50px;height:50px;border-radius:50%;transform:translate(-50%,-50%) scale(0);opacity:0;
     background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(232,119,46,.6) 50%,transparent 100%);}
   @keyframes clapFlash{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}100%{transform:translate(-50%,-50%) scale(10);opacity:0;}}
   #clapFlash.go{animation:clapFlash .38s ease-out forwards;}
   @media(prefers-reduced-motion:reduce){.cb-wave,#clapFlash{display:none;}}
+
+  /* SCREEN QUAKE — one heavy shockwave on clap impact */
+  html,body{overflow-x:hidden;}
+  @keyframes screenQuake{
+    0%  {transform:translate(0,0);       filter:blur(0);}
+    15% {transform:translate(-1px,-.5px);filter:blur(.4px);}
+    35% {transform:translate(1px,.5px);  filter:blur(.2px);}
+    60% {transform:translate(-.5px,0);  filter:blur(0);}
+    100%{transform:translate(0,0);}
+  }
+  body.quake{animation:screenQuake .65s cubic-bezier(.36,.07,.19,.97) both;}
+  @media(prefers-reduced-motion:reduce){body.quake{animation:none;}}
 
   .films{margin-top:26px;display:flex;flex-direction:column;gap:2px;}
   .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:padding .25s;width:min(560px,90vw);}
@@ -472,13 +487,13 @@
   <div class="sec-bg" style="background-image:url('https://i.ytimg.com/vi/l5gFqCWC0nQ/maxresdefault.jpg')"></div>
   <div class="sec-scrim"></div>
   <div class="sec-inner">
-    <div class="kick">Work with me</div>
+    <div class="kick">WORK WITH ME</div>
     <div class="stt">Your day is<br>worth getting right.</div>
-    <div class="sds">I show up like a guest, not a vendor. I stay out of the way and pay attention. You’ll forget I’m there until the film is in your hands.</div>
+    <div class="sds">I’m easy to have around. I’ll hype you up, crack a joke, and actually get to know you and your people — then I know exactly when to fade into the background so the real moments stay real. You get a friend behind the camera and a film that feels like you.</div>
     <div class="wwm-steps">
-      <div class="wstep"><span class="ws-n">01</span><div class="ws-t"><b>Say hello</b><span>Tell me about your day. A 50% deposit holds the date.</span></div></div>
-      <div class="wstep"><span class="ws-n">02</span><div class="ws-t"><b>The day</b><span>I show up and stay out of your way.</span></div></div>
-      <div class="wstep"><span class="ws-n">03</span><div class="ws-t"><b>Your film</b><span>A cinematic edit in your hands, about three months later.</span></div></div>
+      <div class="wstep"><span class="ws-n">01</span><div class="ws-t"><b>Say hello</b><span>Tell me about your day. We’ll talk it through like people, not a contract. A 50% deposit holds the date.</span></div></div>
+      <div class="wstep"><span class="ws-n">02</span><div class="ws-t"><b>The day</b><span>I’m in it with you — reading the room, rolling with the chaos, catching the stuff you’ll want to relive. Present when it counts, invisible when it matters.</span></div></div>
+      <div class="wstep"><span class="ws-n">03</span><div class="ws-t"><b>Your film</b><span>A cinematic edit in your hands, about three months later — <i>the day, the way it actually felt.</i></span></div></div>
     </div>
   </div>
 </section>
@@ -819,6 +834,14 @@
   var busy = false, cur = true; // cur: true = short visible
 
   function swap(isShort) {
+    // FLIP: snapshot positions of any elements that might shift
+    var flipEls = [
+      document.querySelector('.about-photo'),
+      document.querySelector('.about-text')
+    ].filter(Boolean);
+    var firsts = flipEls.map(function(el){ return el.getBoundingClientRect(); });
+
+    // Instant content swap
     short.style.display = isShort ? '' : 'none';
     full.style.display  = isShort ? 'none' : '';
     btnS.classList.toggle('active', isShort);
@@ -828,6 +851,26 @@
     var sc = document.querySelector('.about-scroller');
     if (sc) sc.scrollTop = 0;
     cur = isShort;
+
+    // FLIP: measure delta, invert with transform, then play to zero
+    flipEls.forEach(function(el, i) {
+      var last = el.getBoundingClientRect();
+      var dy = firsts[i].top  - last.top;
+      var dx = firsts[i].left - last.left;
+      if (Math.abs(dy) < 0.5 && Math.abs(dx) < 0.5) return; // no movement, skip
+      el.style.transition = 'none';
+      el.style.transform  = 'translate(' + dx + 'px,' + dy + 'px)';
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          el.style.transition = 'transform .9s cubic-bezier(.22,1,.36,1)';
+          el.style.transform  = '';
+          el.addEventListener('transitionend', function done(){
+            el.style.transition = '';
+            el.removeEventListener('transitionend', done);
+          });
+        });
+      });
+    });
   }
 
   function triggerBurst() {
@@ -840,6 +883,11 @@
       void el.offsetWidth; // force reflow so animation restarts
       el.classList.add('go');
     });
+    // Screen quake — feels like the shockwave hit the lens
+    document.body.classList.remove('quake');
+    void document.body.offsetWidth;
+    document.body.classList.add('quake');
+    setTimeout(function(){ document.body.classList.remove('quake'); }, 720);
   }
 
   function clap(isShort) {
