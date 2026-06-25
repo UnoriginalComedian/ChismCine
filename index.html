@@ -288,11 +288,33 @@
   .leak2{width:80%;height:150%;left:-25%;bottom:-32%;background:radial-gradient(closest-side,rgba(255,216,158,.95),rgba(224,110,44,.64) 48%,rgba(224,110,44,0) 80%);}
   .expose{position:fixed;inset:0;z-index:38;background:radial-gradient(130% 130% at 58% 44%,#FFF7EC,#F8E2C0);opacity:0;pointer-events:none;}
 
+  /* MOBILE HAMBURGER */
+  .mob-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;
+    flex-direction:column;gap:5px;align-items:center;justify-content:center;}
+  .mob-menu-btn span{display:block;width:22px;height:2px;border-radius:1px;
+    background:var(--muted);transition:transform .3s,opacity .3s,background .3s;}
+  body.darkui .mob-menu-btn span{background:rgba(247,247,244,.7);}
+  .mob-menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .mob-menu-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+  .mob-menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mob-nav{position:fixed;top:63px;left:0;right:0;z-index:54;
+    background:rgba(9,19,12,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    display:grid;grid-template-rows:0fr;
+    transition:grid-template-rows .38s cubic-bezier(.22,1,.36,1);}
+  .mob-nav.open{grid-template-rows:1fr;}
+  .mob-nav-inner{overflow:hidden;}
+  .mob-nav a{display:block;font-family:var(--mono);font-size:12px;letter-spacing:2.5px;
+    text-transform:uppercase;color:rgba(247,247,244,.6);
+    padding:17px 24px;border-bottom:1px solid rgba(247,247,244,.07);cursor:pointer;
+    transition:color .2s,padding-left .2s;}
+  .mob-nav a:active{color:var(--orange);padding-left:34px;}
+
   @media(max-width:640px){
     .sec-inner,.home-inner{padding-left:24px;padding-right:24px;}
     .kit{grid-template-columns:1fr 1fr;}
     .navlinks{display:none;}
     .stamp{display:none;}
+    .mob-menu-btn{display:flex;}
   }
 
   /* CONTACT — floating C-lens button */
@@ -354,7 +376,18 @@
     <a data-go="collab">Collab</a>
     <a data-go="contact">Contact</a>
   </nav>
+  <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+<div class="mob-nav" id="mobNav" aria-hidden="true">
+  <div class="mob-nav-inner">
+    <a data-go="about">About</a>
+    <a data-go="wwm">Work with me</a>
+    <a data-go="collab">Collab</a>
+    <a data-go="contact">Contact</a>
+  </div>
+</div>
 
 <!-- HOME -->
 <section class="screen show home" data-id="home">
@@ -794,8 +827,26 @@
   // logo + top nav + back
   document.querySelectorAll('[data-go]').forEach(function(el){
     if(el.classList.contains('fpi')) return;
-    el.addEventListener('click',function(e){ e.preventDefault(); goTo(el.getAttribute('data-go')); });
+    el.addEventListener('click',function(e){
+      e.preventDefault();
+      // close mobile menu if open
+      var mb=document.getElementById('mobMenuBtn'), mn=document.getElementById('mobNav');
+      if(mb&&mn){ mb.classList.remove('open'); mb.setAttribute('aria-expanded','false'); mn.classList.remove('open'); mn.setAttribute('aria-hidden','true'); }
+      goTo(el.getAttribute('data-go'));
+    });
   });
+
+  // mobile hamburger toggle
+  (function(){
+    var btn=document.getElementById('mobMenuBtn'), nav=document.getElementById('mobNav');
+    if(!btn||!nav) return;
+    btn.addEventListener('click',function(){
+      var open=btn.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      nav.classList.toggle('open', open);
+      nav.setAttribute('aria-hidden', open ? 'false' : 'true');
+    });
+  })();
 
   // logo: record dot morphs into the curved reflection glint (one continuous shape)
   (function(){
