@@ -348,6 +348,16 @@
     /* About — clapperboard must be positioned within about-text */
     .about-text{position:relative;}
 
+    /* About — full-width photo banner on mobile */
+    .about-split{flex-direction:column;overflow-y:auto;padding:0;gap:0;align-items:stretch;}
+    .about-photo{order:-1;}
+    .about-photo img{width:100%;height:clamp(200px,40vh,280px);object-fit:cover;object-position:center 12%;border-radius:0;border:none;box-shadow:none;max-width:none;}
+    .about-text{padding:24px 24px 100px;overflow-y:visible;}
+    .about-scroller{max-height:none;overflow:visible;}
+
+    /* WWM — hide awkwardly-cropped landscape bg photo on mobile */
+    [data-id="wwm"] .sec-bg{display:none;}
+
     /* Collab — standalone spec card on mobile (camera body hidden, menu visible) */
     .fx30-img,.fx30-fade{display:none;}
     .fx30-cam{display:block;width:100% !important;margin-left:0 !important;filter:none;}
@@ -516,7 +526,7 @@
 
 <!-- ABOUT -->
 <section class="screen" data-id="about">
-  <div class="sec-bg blur" role="img" aria-label="Joel Chism on location — San Diego wedding and commercial filmmaker" style="background-image:url('https://chismcine.com/assets/images/image01.jpg')"></div>
+  <div class="sec-bg blur" role="img" aria-label="Joel Chism on location — San Diego wedding and commercial filmmaker" style="background-image:url('assets/images/image01.jpg')"></div>
   <div class="sec-scrim"></div>
   <div class="clapper-wrap" id="clapperWrap" aria-hidden="true">
     <div class="clapper-board">
@@ -559,7 +569,7 @@
         </div>
       </div>
     </div>
-    <div class="about-photo"><img src="https://chismcine.com/assets/images/image01.jpg" alt="Joel Chism, San Diego wedding and commercial videographer, documentary-style filmmaker portrait" loading="lazy"></div>
+    <div class="about-photo"><img src="assets/images/image01.jpg" alt="Joel Chism, San Diego wedding and commercial videographer, documentary-style filmmaker portrait" loading="lazy"></div>
   </div>
 </section>
 
