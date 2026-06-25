@@ -160,6 +160,25 @@
   .cf-v{font-family:var(--mono);font-size:8px;color:#aaa;
     border-bottom:1px solid #1e1e1e;line-height:1.9;}
 
+  /* CLAP BURST — expanding color waves + impact flash */
+  .cb-wave{position:fixed;inset:0;pointer-events:none;z-index:4;opacity:0;
+    clip-path:circle(0% at 15% 50%);}
+  #cbWave1{background:rgba(232,119,46,.52);}
+  #cbWave2{background:rgba(28,140,125,.42);}
+  #cbWave3{background:rgba(22,58,41,.38);}
+  @keyframes clapWave1{0%{clip-path:circle(0% at 15% 50%);opacity:.52;}80%{opacity:.1;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
+  @keyframes clapWave2{0%{clip-path:circle(0% at 15% 50%);opacity:.42;}80%{opacity:.08;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
+  @keyframes clapWave3{0%{clip-path:circle(0% at 15% 50%);opacity:.38;}80%{opacity:.06;}100%{clip-path:circle(150% at 15% 50%);opacity:0;}}
+  #cbWave1.go{animation:clapWave1 .55s ease-out forwards;}
+  #cbWave2.go{animation:clapWave2 .72s ease-out .08s forwards;}
+  #cbWave3.go{animation:clapWave3 .9s ease-out .18s forwards;}
+  #clapFlash{position:fixed;left:15%;top:50%;z-index:8;pointer-events:none;
+    width:50px;height:50px;border-radius:50%;transform:translate(-50%,-50%) scale(0);opacity:0;
+    background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(232,119,46,.6) 50%,transparent 100%);}
+  @keyframes clapFlash{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}100%{transform:translate(-50%,-50%) scale(10);opacity:0;}}
+  #clapFlash.go{animation:clapFlash .38s ease-out forwards;}
+  @media(prefers-reduced-motion:reduce){.cb-wave,#clapFlash{display:none;}}
+
   .films{margin-top:26px;display:flex;flex-direction:column;gap:2px;}
   .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:padding .25s;width:min(560px,90vw);}
   .film:hover{padding-left:12px;}
@@ -416,6 +435,10 @@
       </div>
     </div>
   </div>
+  <div id="clapFlash" aria-hidden="true"></div>
+  <div class="cb-wave" id="cbWave1" aria-hidden="true"></div>
+  <div class="cb-wave" id="cbWave2" aria-hidden="true"></div>
+  <div class="cb-wave" id="cbWave3" aria-hidden="true"></div>
   <div class="about-split">
     <div class="about-text">
       <div class="kick">The Filmmaker · San Diego, CA</div>
@@ -807,6 +830,18 @@
     cur = isShort;
   }
 
+  function triggerBurst() {
+    var flash = document.getElementById('clapFlash');
+    var ids = ['cbWave1','cbWave2','cbWave3'];
+    var els = ids.map(function(id){ return document.getElementById(id); });
+    els.concat(flash ? [flash] : []).forEach(function(el){
+      if (!el) return;
+      el.classList.remove('go');
+      void el.offsetWidth; // force reflow so animation restarts
+      el.classList.add('go');
+    });
+  }
+
   function clap(isShort) {
     if (busy || isShort === cur) return;
     busy = true;
@@ -814,11 +849,12 @@
     wrap.style.transition = 'transform .5s cubic-bezier(.18,0,.25,1)';
     wrap.classList.add('clap-in');
     setTimeout(function(){
-      // 2. Clap arm down
+      // 2. Clap arm down + fire burst
       arm.classList.add('clamped');
-      // 3. Swap content at impact (120ms into the clap)
+      triggerBurst();
+      // 3. Swap content at impact (120ms — hidden under the orange wave)
       setTimeout(function(){ swap(isShort); }, 120);
-      // 4. Unclap after 460ms
+      // 4. Unclap after 460ms (waves still fading)
       setTimeout(function(){
         arm.classList.remove('clamped');
         // 5. Pause 350ms then slide out
