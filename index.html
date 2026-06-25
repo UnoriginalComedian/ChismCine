@@ -124,7 +124,7 @@
   .atbtn.active{color:#F7F7F4;border-color:rgba(28,140,125,.65);background:rgba(28,140,125,.14);}
   .atbtn.active::before{opacity:1;transform:scale(1);}
   .atbtn:hover:not(.active){border-color:rgba(247,247,244,.42);color:rgba(247,247,244,.75);}
-  .atbtn:focus-visible{outline:2px solid var(--teal);outline-offset:4px;}
+  a:focus-visible,button:focus-visible,[role="button"]:focus-visible,[tabindex="0"]:focus-visible{outline:2px solid var(--teal);outline-offset:4px;}
   @media(prefers-reduced-motion:reduce){.atbtn,.atbtn::before{transition:none;}}
   .about-scroller{overflow-y:auto;max-height:clamp(160px,42vh,380px);margin-top:18px;padding-right:6px;}
   .about-scroller::-webkit-scrollbar{width:3px;}
@@ -159,7 +159,7 @@
   .ct-ci{color:#9FE0CE;}
   .clapper-fields{display:grid;grid-template-columns:max-content 1fr;gap:3px 12px;}
   .cf-k{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;
-    text-transform:uppercase;color:#666;line-height:1.9;}
+    text-transform:uppercase;color:#888;line-height:1.9;}
   .cf-v{font-family:var(--mono);font-size:11px;color:#aaa;
     border-bottom:1px solid #1e1e1e;line-height:1.9;}
 
@@ -195,8 +195,8 @@
   @media(prefers-reduced-motion:reduce){body.quake{animation:none;}}
 
   .films{margin-top:26px;display:flex;flex-direction:column;gap:2px;}
-  .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:padding .25s;width:min(560px,90vw);}
-  .film:hover{padding-left:12px;}
+  .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:transform .25s;width:min(560px,90vw);}
+  .film:hover{transform:translateX(12px);}
   .film .fnum{font-family:var(--mono);font-size:12px;color:var(--orange);}
   .film .ftit{font-family:var(--disp);font-weight:500;font-size:clamp(19px,2.4vw,25px);letter-spacing:-.5px;color:#F7F7F4;}
   .film .ftag{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(247,247,244,.6);}
@@ -306,8 +306,8 @@
   .mob-nav a{display:block;font-family:var(--mono);font-size:12px;letter-spacing:2.5px;
     text-transform:uppercase;color:rgba(247,247,244,.6);
     padding:17px 24px;border-bottom:1px solid rgba(247,247,244,.07);cursor:pointer;
-    transition:color .2s,padding-left .2s;}
-  .mob-nav a:active{color:var(--orange);padding-left:34px;}
+    transition:color .2s,transform .2s;}
+  .mob-nav a:active{color:var(--orange);transform:translateX(10px);}
 
   @media(max-width:640px){
     .sec-inner,.home-inner{padding-left:24px;padding-right:24px;}
@@ -384,26 +384,30 @@
   .cdone .cdt{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--ink);}
   .cdone .cds{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--muted);}
   .cerr{font-family:var(--mono);font-size:11px;color:#b23b2c;margin-top:8px;text-align:center;display:none;}
+  .skip-link{position:absolute;top:-100%;left:0;background:var(--teal);color:#fff;padding:8px 16px;z-index:200;
+    font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+  .skip-link:focus{top:0;}
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to content</a>
 
 <header class="topbar">
   <div class="tb-left">
-    <div class="brand" data-go="home">
+    <div class="brand" data-go="home" role="button" tabindex="0" aria-label="Chism Cinematics — home">
       <svg class="cmark" viewBox="0 0 100 100" fill="none">
         <circle class="ring" cx="50" cy="50" r="34" stroke-width="11" stroke-linecap="round" stroke-dasharray="160.2 53.4" transform="rotate(45 50 50)"/>
         <path class="dotglint" d="M50 50 Q50 50 50.01 50" fill="none" stroke="#E8772E" stroke-width="14" stroke-linecap="round"/>
       </svg>
       <span class="wm"><span class="hism">hism</span><span class="cine">cinematics</span></span>
     </div>
-    <span class="back" id="backBtn" data-go="home">← Focus</span>
+    <button class="back" id="backBtn" data-go="home">← Focus</button>
   </div>
   <nav class="navlinks">
-    <a data-go="about">About</a>
-    <a data-go="wwm">Work with me</a>
-    <a data-go="collab">Collab</a>
-    <a data-go="contact">Contact</a>
+    <a data-go="about" tabindex="0">About</a>
+    <a data-go="wwm" tabindex="0">Work with me</a>
+    <a data-go="collab" tabindex="0">Collab</a>
+    <a data-go="contact" tabindex="0">Contact</a>
   </nav>
   <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -411,13 +415,14 @@
 </header>
 <div class="mob-nav" id="mobNav" aria-hidden="true">
   <div class="mob-nav-inner">
-    <a data-go="about">About</a>
-    <a data-go="wwm">Work with me</a>
-    <a data-go="collab">Collab</a>
-    <a data-go="contact">Contact</a>
+    <a data-go="about" tabindex="0">About</a>
+    <a data-go="wwm" tabindex="0">Work with me</a>
+    <a data-go="collab" tabindex="0">Collab</a>
+    <a data-go="contact" tabindex="0">Contact</a>
   </div>
 </div>
 
+<main id="main-content">
 <!-- HOME -->
 <section class="screen show home" data-id="home">
   <video class="home-vid" id="homeVid" muted loop playsinline preload="auto" aria-label="Chism Cinematics showreel — wedding, commercial, and music video footage by Joel Chism, San Diego filmmaker"></video>
@@ -426,10 +431,10 @@
     <div class="ey">Select a reel — focus</div>
     <div class="tagline">Films worth watching twice.</div>
     <nav class="fpmenu" id="menu">
-      <a class="fpi" data-go="weddings"><span class="num">01</span>Weddings<span class="ar">→</span></a>
-      <a class="fpi" data-go="commercial"><span class="num">02</span>Commercial<span class="ar">→</span></a>
-      <a class="fpi" data-go="music"><span class="num">03</span>Music Videos<span class="ar">→</span></a>
-      <a class="fpi" data-go="shorts"><span class="num">04</span>Short Films<span class="ar">→</span></a>
+      <a class="fpi" data-go="weddings" tabindex="0"><span class="num">01</span>Weddings<span class="ar">→</span></a>
+      <a class="fpi" data-go="commercial" tabindex="0"><span class="num">02</span>Commercial<span class="ar">→</span></a>
+      <a class="fpi" data-go="music" tabindex="0"><span class="num">03</span>Music Videos<span class="ar">→</span></a>
+      <a class="fpi" data-go="shorts" tabindex="0"><span class="num">04</span>Short Films<span class="ar">→</span></a>
     </nav>
   </div>
   <div class="readout" id="readout"></div>
@@ -442,7 +447,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">01 — Weddings</div>
-    <div class="stt">The day, as it felt.</div>
+    <h1 class="stt">The day, as it felt.</h1>
     <div class="sds">Wedding films shot documentary-style. If it happened, it's in the film.</div>
     <div class="films" data-bgtarget="weddingsBg">
       <a class="film" aria-label="Zach and Patience wedding film — documentary-style ceremony and reception coverage by Chism Cinematics" data-img="https://i.ytimg.com/vi/l5gFqCWC0nQ/maxresdefault.jpg" href="https://www.youtube.com/watch?v=l5gFqCWC0nQ" target="_blank"><span class="fnum">01</span><span class="ftit">Zach &amp; Patience</span><span class="ftag">Wedding Film</span></a>
@@ -457,7 +462,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">02 — Commercial</div>
-    <div class="stt">Brands, unscrollable.</div>
+    <h1 class="stt">Brands, unscrollable.</h1>
     <div class="sds">Testimonial and brand work that makes a business impossible to scroll past.</div>
     <div class="films" data-bgtarget="commercialBg">
       <a class="film" data-img="linear-gradient(135deg,#1d4733,#0a1c13)" href="https://www.youtube.com/playlist?list=PLlNEiMdu6d2kNsftwkUK5147jMYELftjY" target="_blank"><span class="fnum">01</span><span class="ftit">CB Painting</span><span class="ftag">Testimonial ↗</span></a>
@@ -472,7 +477,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">03 — Music Videos</div>
-    <div class="stt">Built around the track.</div>
+    <h1 class="stt">Built around the track.</h1>
     <div class="sds">Shot around the artist. Cut to the song.</div>
     <div class="films" data-bgtarget="musicBg">
       <a class="film" data-img="linear-gradient(135deg,#3a2a12,#0c1f15)" href="https://www.youtube.com/playlist?list=PLVpRNQJjOc5E" target="_blank"><span class="fnum">01</span><span class="ftit">Tyler Burgee — Exit Signs</span><span class="ftag">Music Video ↗</span></a>
@@ -487,7 +492,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">04 — Short Films</div>
-    <div class="stt">Where craft stretches.</div>
+    <h1 class="stt">Where craft stretches.</h1>
     <div class="sds">Narrative work and passion projects. The camera gets to play here.</div>
     <div class="films" data-bgtarget="shortsBg">
       <a class="film" data-img="linear-gradient(135deg,#11140F,#0c1f15)" href="https://www.youtube.com/@ChismvilleTech" target="_blank"><span class="fnum">01</span><span class="ftit">On the channel</span><span class="ftag">YouTube ↗</span></a>
@@ -519,7 +524,7 @@
   <div class="about-split">
     <div class="about-text">
       <div class="kick">The Filmmaker · San Diego, CA</div>
-      <div class="stt">Hey, I’m Joel.</div>
+      <h1 class="stt">Hey, I’m Joel.</h1>
       <div class="about-toggle" role="group" aria-label="Bio length">
         <button class="atbtn active" id="btnShort" aria-pressed="true">Short</button>
         <button class="atbtn" id="btnFull" aria-pressed="false">Full</button>
@@ -550,7 +555,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">WORK WITH ME</div>
-    <div class="stt">Your day is<br>worth getting right.</div>
+    <h1 class="stt">Your day is<br>worth getting right.</h1>
     <div class="sds">I’m easy to have around. I’ll hype you up, crack a joke, and actually get to know you and your people — then I know exactly when to fade into the background so the real moments stay real. You get a friend behind the camera and a film that feels like you.</div>
     <div class="wwm-steps">
       <div class="wstep"><span class="ws-n">01</span><div class="ws-t"><b>Say hello</b><span>Tell me about your day. We’ll talk it through like people, not a contract. A 50% deposit holds the date.</span></div></div>
@@ -565,7 +570,7 @@
   <div class="wwm-wrap">
     <div class="wwm-head">
       <div class="kick">Collab · for fellow creators</div>
-      <div class="wwm-title">Let’s crew up.</div>
+      <h1 class="wwm-title">Let’s crew up.</h1>
       <div class="wwm-sub">My kit and how I work, racked like a camera menu. For fellow nerds.</div>
     </div>
     <div class="fx30-cam">
@@ -597,7 +602,7 @@
   <div class="sec-scrim"></div>
   <div class="sec-inner">
     <div class="kick">Get in touch</div>
-    <div class="stt">Let’s make<br>something good.</div>
+    <h1 class="stt">Let’s make<br>something good.</h1>
     <div class="sds">Tell me what you’re working on. I’ll tell you how I’d shoot it.</div>
     <a class="cbtn" href="mailto:joel@chismcine.com">joel@chismcine.com</a>
     <div class="csocial">
@@ -608,6 +613,7 @@
   </div>
 </section>
 
+</main>
 <!-- transition overlays -->
 <div class="bar bt" id="bt"></div>
 <div class="bar bb" id="bb"></div>
@@ -898,6 +904,16 @@
   })();
 
   restDOF();
+
+  // Keyboard nav — fire click on Enter/Space for non-button data-go elements
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var el = e.target;
+    if (!el.getAttribute('data-go')) return;
+    if (el.tagName === 'BUTTON') return;
+    e.preventDefault();
+    el.click();
+  });
 
 })();
 
