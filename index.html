@@ -347,9 +347,12 @@
     /* About — clapperboard must be positioned within about-text */
     .about-text{position:relative;}
 
-    /* Collab — hide camera composite on phone, show just head */
-    .fx30-cam{display:none;}
-    .wwm-wrap{justify-content:center;}
+    /* Collab — standalone spec card on mobile (camera body hidden, menu visible) */
+    .fx30-img,.fx30-fade{display:none;}
+    .fx30-cam{display:block;width:100% !important;margin-left:0 !important;filter:none;}
+    .fx30-lcd{position:static !important;left:auto;top:auto;width:100% !important;height:auto !important;overflow:visible !important;border-radius:8px;}
+    .menu-os{transform:none !important;width:100% !important;height:auto !important;}
+    .wwm-wrap{justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:max(80px,env(safe-area-inset-bottom));}
 
     /* Safe area for notch/home-indicator */
     .contact{bottom:max(22px,env(safe-area-inset-bottom));}
