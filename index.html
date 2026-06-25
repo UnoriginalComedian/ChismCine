@@ -110,6 +110,23 @@
     .about-text{flex:0 0 auto;}
   }
 
+  /* ABOUT TOGGLE */
+  .about-toggle{display:flex;gap:6px;margin:20px 0 0;}
+  .atbtn{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:7px 20px;border-radius:100px;border:1.5px solid rgba(247,247,244,.28);
+    background:transparent;color:rgba(247,247,244,.5);cursor:pointer;
+    -webkit-font-smoothing:antialiased;transition:border-color .18s,color .18s;}
+  .atbtn:hover:not(.active){border-color:rgba(247,247,244,.6);color:rgba(247,247,244,.82);}
+  .atbtn.active{background:#E23A2E;color:#fff;border-color:#E23A2E;}
+  .atbtn:focus-visible{outline:2px solid #C6F035;outline-offset:3px;}
+  @media(prefers-reduced-motion:reduce){.atbtn{transition:none;}}
+  .about-scroller{overflow-y:auto;max-height:clamp(160px,42vh,380px);margin-top:18px;padding-right:6px;}
+  .about-scroller::-webkit-scrollbar{width:3px;}
+  .about-scroller::-webkit-scrollbar-track{background:transparent;}
+  .about-scroller::-webkit-scrollbar-thumb{background:rgba(247,247,244,.2);border-radius:2px;}
+  .about-scroller .sds{max-width:none;}
+  .about-scroller .sds+.sds{margin-top:14px;}
+
   .films{margin-top:26px;display:flex;flex-direction:column;gap:2px;}
   .film{display:flex;align-items:baseline;gap:16px;padding:11px 0;border-top:1px solid rgba(247,247,244,.16);cursor:pointer;transition:padding .25s;width:min(560px,90vw);}
   .film:hover{padding-left:12px;}
@@ -357,8 +374,24 @@
     <div class="about-text">
       <div class="kick">The Filmmaker · San Diego, CA</div>
       <div class="stt">Hey, I’m Joel.</div>
-      <div class="sds">I’m a Christian and I take vows seriously. That shapes how I show up: present, quiet, patient enough to wait for the real moments. I don’t direct. I just watch.</div>
-      <div class="sds" style="margin-top:14px;">When I’m not shooting, I’m with the people I love.</div>
+      <div class="about-toggle" role="group" aria-label="Bio length">
+        <button class="atbtn active" id="btnShort" aria-pressed="true" onclick="aboutToggle(‘short’)">Short</button>
+        <button class="atbtn" id="btnFull" aria-pressed="false" onclick="aboutToggle(‘full’)">Full</button>
+      </div>
+      <div class="about-scroller">
+        <div id="aboutShort">
+          <p class="sds">I’m Joel — a videographer who points the camera at real people and real moments: weddings, worship nights, brand stories, documentaries. I’m a Christian, a Connector who turns your vision into reality, and a coffee-obsessed geek with youth pastor energy. If that’s your kind of person, let’s make something.</p>
+        </div>
+        <div id="aboutFull" style="display:none;">
+          <p class="sds">I make videos. Weddings, worship nights, brand stories, the occasional documentary — basically, if it’s real and there are people in it, I want to press record.</p>
+          <p class="sds">I’m a Christian — front page, plain text, not something you have to go digging to find out. If you want to know where I’m coming from, read 1 Corinthians 13.</p>
+          <p class="sds">I got into film in college because I was done with tests and memorization. Film was the opposite: work with people, make something cool. Fell in love on day one and never looked back.</p>
+          <p class="sds">Here’s how I work. I’m a Connector — a term from Malcolm Gladwell’s <em>The Tipping Point</em> for the people who are good at getting things done and connecting the dots (and the right people to each other). I’m not the lone genius dreaming up the big idea; I’m the one who takes your idea and makes it real. So I do my best work alongside people who know what they want, building it together.</p>
+          <p class="sds">Off the clock, I’m a geek — <em>noun: a person with obsessive enthusiasm for a specific subject — and, unlike a nerd, social about it.</em> Current subjects: coffee, custom mechanical keyboards, audio gear, and EDM, just to name a few. I’m learning photography too.</p>
+          <p class="sds">People say I give off youth pastor energy, which tracks: a millennial in a Gen Z body, jokester by default, people person always. I’m an extrovert — though I’ve been told I read like a confident introvert.</p>
+          <p class="sds">If that sounds like your kind of person — let’s make something.</p>
+        </div>
+      </div>
     </div>
     <div class="about-photo"><img src="https://chismcine.com/assets/images/image01.jpg" alt="Joel Chism, San Diego wedding and commercial videographer, documentary-style filmmaker portrait" loading="lazy"></div>
   </div>
@@ -701,6 +734,24 @@
   })();
 
   restDOF();
+
+  // ABOUT TOGGLE — Short / Full bio
+  window.aboutToggle = function(which) {
+    var short  = document.getElementById('aboutShort');
+    var full   = document.getElementById('aboutFull');
+    var btnS   = document.getElementById('btnShort');
+    var btnF   = document.getElementById('btnFull');
+    var isShort = which === 'short';
+    short.style.display = isShort ? '' : 'none';
+    full.style.display  = isShort ? 'none' : '';
+    btnS.classList.toggle('active', isShort);
+    btnF.classList.toggle('active', !isShort);
+    btnS.setAttribute('aria-pressed', isShort ? 'true' : 'false');
+    btnF.setAttribute('aria-pressed', !isShort ? 'true' : 'false');
+    var scroller = document.querySelector('.about-scroller');
+    if (scroller) scroller.scrollTop = 0;
+  };
+
 })();
 </script>
 <!-- CONTACT — floating C-lens button -->
